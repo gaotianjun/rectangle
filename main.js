@@ -18,14 +18,9 @@ $width.keypress((e)=>{
 
   val=val.slice(0,pos)+key+val.slice(pos,val.length);
 
-   // if(!/[abcdf-zABCDF-Z`~!@#$%^&()=_+[\]{}|;:'",<>/?\\]/.test(val))
-   //  // e.preventDefault();
-   //
-   //   // if(val.indexOf('e')!==-1) e.preventDefault();
-   //
-    if(!/^(0|[1-9]\d*)(\.\d+)?((e|E)(\+|-)?\d+)?$/.test(val))e.preventDefault();
-   
-    })
+   if(!/^-?(0|[1-9]\d*)(\.\d*)?([eE][+-]?\d+)?$/.test(val)){
+      e.preventDefault}
+})
    
 $height.keypress((e)=>{
       let key=e.key,
@@ -33,7 +28,9 @@ $height.keypress((e)=>{
           pos=e.target.selectionSatrt;
           val=val.slice(0,pos)+key+val.slice(pos,val.length);
    
-   if(!/^(0|[1-9]\d*)(\.\d+)?((e|E)(\+|-)?\d+)?$/.test(val))e.preventDefault();
+  
+  if(!/^-?(0|[1-9]\d*)(\.\d*)?([eE][+-]?\d+)?$/.test(val)) {
+    e.preventDefault}
   })
    
 $width.focusout(()=>{
@@ -47,7 +44,11 @@ $height.focusout(()=>{
        $height.select();
      } 
    })
-  
+
+//保留小数点位数
+function roundFractional(x, n) {
+    return Math.round(x * Math.pow(10, n)) / Math.pow(10, n);
+}
   
 $btnCal.click(()=>{
     //get value
@@ -60,41 +61,35 @@ $btnCal.click(()=>{
    let p=(w+h)*2,
        a=w*h;
    //output
-   $perimeter.val(p);
-   $area.val(a);
+   $perimeter.val(roundFractional(p,2));
+   $area.val(roundFractional(a,2));
   }})
 });
    
 function validate(input,output){
+   
    //isempty
     if(input.val()===''){
       output.html('该字段不能为空');
-      return false;
+      return false; 
     }else{
       output.html('');
    }
-   
+   let val=Number(input.val());
    //isnumber
-   let val=Number(input.val())
-      console.log(val);
-   if(isNaN(val)){
-         output.html('该字段应该是数字');
-             return false;
-               
+   if(!/^-?(0|[1-9]\d*)(\.\d*)?([eE][+-]?\d+)?$/.test(val)) {
+        output.html('该字段应该是数字');
+        return false;         
    }else{
-       output.html('');
-         
-          
+       output.html('');     
    };
 
-   
+   //小于0
    if(val<0){
        output.html('该字段不能小于0');
          return false
-
    }else{
-       output.html('');
-        
+       output.html('');      
    }
 
    return true;
