@@ -85,8 +85,8 @@ function validate(input,output){
    };
 
    //小于0
-   if(val<0){
-       output.html('该字段不能小于0');
+   if(val<=0){
+       output.html('该字段不能小于或等于0');
          return false
    }else{
        output.html('');      
